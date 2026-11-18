@@ -23,9 +23,9 @@
 | 文書 | 内容 |
 |---|---|
 | [目的と保証範囲](docs/purpose.md) | 何のためのツールか、何を保証しないか |
-| [概念モデル](docs/concept-model.md) | モデルの要素と関係、構造の規則 |
+| [概念モデル](docs/concept-model.md) | 概念の定義、構造の規則 |
+| [概念モデルの図](model/bizspec-concept-overview.html) | クラス図と、経費精算を題材にした仕様書の記述例。`model/build.sh` で生成する |
 | [決定記録](docs/decisions.md) | 決定とその理由、採用しなかった案 |
 | [未決事項](docs/open-issues.md) | これから決める事項 |
-| [記述例](docs/examples.md) | 経費精算を題材にした仕様書の例 |
 
 文書の中で、決定していない事項には【提案】【未決】と書いています。表記のないものは決定済みです。

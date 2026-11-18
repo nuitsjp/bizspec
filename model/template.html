@@ -1,0 +1,246 @@
+<title>bizspec 概念モデル全体図</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600&display=swap">
+<style>
+/* Layout: one wide drawing sheet under a short header; legend above the figure, findings below it. */
+:root {
+  --bg: #f5f6f8; --sheet: #ffffff; --ink: #1c2330; --muted: #5d6675; --rule: #d5dae2; --band: #eef1f5;
+  --dec: #1f4f8f; --prop: #a15c00; --open: #a3246b; --inh: #2f6f62; --new: #5b3fb5;
+  --font: "IBM Plex Sans JP", "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Meiryo", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #14181f; --sheet: #1b212b; --ink: #e6e9ee; --muted: #9aa4b3; --rule: #364050; --band: #212936;
+  --dec: #8ab8f5; --prop: #f0b45a; --open: #f08cc0; --inh: #7fcbb8; --new: #b9a4ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #14181f; --sheet: #1b212b; --ink: #e6e9ee; --muted: #9aa4b3; --rule: #364050; --band: #212936;
+  --dec: #8ab8f5; --prop: #f0b45a; --open: #f08cc0; --inh: #7fcbb8; --new: #b9a4ff; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.75;
+  padding-block: 28px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 1720px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+h1 { font-size: 24px; font-weight: 600; margin: 0; line-height: 1.35; text-wrap: balance; }
+h2 { font-size: 17px; font-weight: 600; margin: 0 0 8px; }
+p { margin: 0; max-width: 46em; }
+.meta { color: var(--muted); font-size: 13px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; padding: 0; margin: 0; list-style: none; }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.sw { width: 30px; height: 16px; border: 1.6px solid; border-radius: 3px; background: var(--sheet); flex: none; }
+.sw.dec { border-color: var(--dec); } .sw.inh { border-color: var(--inh); border-width: 1.2px; } .sw.new { border-color: var(--new); border-width: 2.4px; } .sw.opn { border-color: var(--open); border-style: dotted; } .sw.prop { border-color: var(--prop); border-style: dashed; } .sw.open { border: 0; background: none; color: var(--open); font-weight: 600; width: auto; height: auto; }
+figure { margin: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.scroll { overflow-x: auto; padding: 8px; }
+svg { display: block; width: 100%; min-width: 1640px; height: auto; font-family: var(--font); }
+figcaption { border-top: 1px solid var(--rule); padding: 10px 16px; font-size: 13px; color: var(--muted); }
+.band { fill: var(--band); stroke: none; } .grp { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 7 5; } .gt { fill: var(--ink); font-size: 14px; font-weight: 600; letter-spacing: .06em; } .reg { fill: var(--sheet); fill-opacity: .55; stroke: var(--rule); stroke-dasharray: 4 4; } .bt { fill: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: .04em; }
+.box rect { fill: var(--sheet); stroke-width: 1.6; } .box line { stroke-width: 1; }
+.box.dec rect, .box.dec line { stroke: var(--dec); } .box.prop rect, .box.prop line { stroke: var(--prop); } .box.prop rect { stroke-dasharray: 6 4; }
+.nm { fill: var(--ink); font-size: 14px; font-weight: 600; } .id { font-size: 11px; font-weight: 500; }
+.box.dec .id { fill: var(--dec); } .box.prop .id { fill: var(--prop); } .box.open .id { fill: var(--open); } .box.inh .id { fill: var(--inh); }
+.box.open rect, .box.open line { stroke: var(--open); } .box.open rect { stroke-dasharray: 2 3; } .box.inh rect, .box.inh line { stroke: var(--inh); } .box.inh rect { stroke-width: 1.2; } .box.new rect, .box.new line { stroke: var(--new); } .box.new rect { stroke-width: 2.4; } .box.new .id { fill: var(--new); }
+.at, .lb { font-size: 11.5px; } .lb { font-weight: 500; }
+.at.dec, .lb.dec { fill: var(--dec); } .at.prop, .lb.prop { fill: var(--prop); } .at.open, .lb.open { fill: var(--open); } .at.inh, .lb.inh { fill: var(--inh); } .lb.new, .at.new { fill: var(--new); }
+.mu { fill: var(--muted); font-size: 11px; }
+.rel { fill: none; stroke-width: 1.4; } .rel.dash { stroke-dasharray: 5 4; }
+.rel.dec { stroke: var(--dec); } .rel.prop { stroke: var(--prop); } .rel.open { stroke: var(--open); } .rel.inh { stroke: var(--inh); } .rel.new { stroke: var(--new); }
+.mk { fill: none; stroke-width: 1.5; } .mk.dec { stroke: var(--dec); } .mk.prop { stroke: var(--prop); } .mk.open { stroke: var(--open); } .mk.inh { stroke: var(--inh); } .mk.new { stroke: var(--new); }
+.dia.dec { fill: var(--dec); } .dia.prop { fill: var(--prop); } .dia.open { fill: var(--open); } .dia.inh { fill: var(--inh); } .dia.new { fill: var(--new); } .tri { fill: var(--sheet); stroke-width: 1.4; } .tri.dec { stroke: var(--dec); } .tri.open { stroke: var(--open); } .tri.new { stroke: var(--new); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+th { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+td:first-child { white-space: nowrap; font-weight: 600; }
+td.ref { white-space: nowrap; color: var(--muted); font-size: 13px; }
+
+.ex { border-top: 1px solid var(--rule); padding-top: 22px; display: flex; flex-direction: column; gap: 18px; }
+.ex h3 { font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+.ex .note { color: var(--muted); font-size: 13px; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; font-size: 14px; }
+.facts dt { color: var(--muted); font-size: 13px; } .facts dd { margin: 0; min-width: 0; }
+.flow { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; overflow-x: auto; padding: 8px; }
+.flow svg { min-width: 940px; max-width: 1100px; }
+.fb { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.3; } .fl { fill: none; stroke: var(--ink); stroke-width: 1.3; }
+.fk { fill: var(--ink); } .fm { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+.fn { fill: var(--ink); font-size: 13px; font-weight: 600; } .fs { fill: var(--muted); font-size: 10.5px; } .ft { fill: var(--new); font-size: 11px; font-weight: 500; }
+.ex table td:first-child { font-weight: 500; } .tid { color: var(--new); font-weight: 600; white-space: nowrap; }
+.cov { font-size: 14px; }
+
+.pl { fill: none; stroke: var(--ink); stroke-width: 1.3; } .ll { fill: var(--muted); font-size: 12px; font-weight: 600; }
+.fe { fill: var(--sheet); stroke: var(--ink); stroke-width: 3.2; } .fg { fill: none; stroke: var(--ink); stroke-width: 3; } .fa { fill: var(--ink); }
+.fy { fill: var(--muted); font-size: 9.5px; }
+
+.doc { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.doc h3 { margin: 8px 0 0; } .doc h3.doct { font-size: 19px; margin: 0; }
+.doc .flow { border: 0; padding: 0; background: none; }
+ul.plain, ol.steps { margin: 0; padding-left: 1.3em; } ul.plain { list-style: none; padding-left: 0; }
+ul.plain li, ol.steps li { margin: 2px 0; }
+.ex td b { font-weight: 600; }
+
+.fo { fill: none; stroke: var(--muted); stroke-width: 1.1; } .fam { fill: var(--muted); }
+.fbo { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.1; } .fno { fill: var(--muted); font-size: 13px; font-weight: 600; }
+.fl2 { fill: none; stroke: var(--new); stroke-width: 2.2; } .fa2c { fill: var(--new); }
+
+.fo { fill: none; stroke: var(--muted); stroke-width: 1.1; } .fam { fill: var(--muted); }
+.fbo { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.1; } .fno { fill: var(--muted); font-size: 13px; font-weight: 600; }
+.fl2 { fill: none; stroke: var(--new); stroke-width: 2.2; } .fa2c { fill: var(--new); }
+.fmo { fill: none; stroke: var(--ink); stroke-width: 1.6; } .fmi { fill: none; stroke: var(--new); stroke-width: 1.8; } .fmm { fill: none; stroke: var(--muted); stroke-width: 1.6; }
+.ffr { fill: none; stroke: var(--ink); stroke-width: 1.2; } .fft { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.2; } .ffn { fill: var(--ink); font-size: 12px; font-weight: 600; }
+
+.fo { fill: none; stroke: var(--muted); stroke-width: 1.1; } .fam { fill: var(--muted); }
+.fbo { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.1; } .fno { fill: var(--muted); font-size: 13px; font-weight: 600; }
+.fl2 { fill: none; stroke: var(--new); stroke-width: 2.2; } .fa2c { fill: var(--new); }
+.fmo { fill: none; stroke: var(--ink); stroke-width: 1.6; } .fmi { fill: none; stroke: var(--new); stroke-width: 1.8; } .fmm { fill: none; stroke: var(--muted); stroke-width: 1.6; }
+.ffr { fill: none; stroke: var(--ink); stroke-width: 1.2; } .fft { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.2; } .ffn { fill: var(--ink); font-size: 12px; font-weight: 600; }
+.flg { fill: var(--sheet); stroke: var(--rule); stroke-width: 1; } .flt { fill: var(--ink); font-size: 11.5px; }
+
+.fo { fill: none; stroke: var(--muted); stroke-width: 1.1; } .fam { fill: var(--muted); }
+.fbo { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.1; } .fno { fill: var(--muted); font-size: 13px; font-weight: 600; }
+.fl2 { fill: none; stroke: var(--new); stroke-width: 2.2; } .fa2c { fill: var(--new); }
+.fmo { fill: none; stroke: var(--ink); stroke-width: 1.6; } .fmi { fill: none; stroke: var(--new); stroke-width: 1.8; } .fmm { fill: none; stroke: var(--muted); stroke-width: 1.6; }
+.ffr { fill: none; stroke: var(--ink); stroke-width: 1.2; } .fft { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.2; } .ffn { fill: var(--ink); font-size: 12px; font-weight: 600; }
+.flg { fill: var(--sheet); stroke: var(--rule); stroke-width: 1; } .flt { fill: var(--ink); font-size: 11.5px; }
+.fna { fill: var(--ink); font-size: 12px; font-weight: 600; }
+</style>
+<main>
+  <header>
+    <h1>bizspec 概念モデル全体図</h1>
+    
+  </header>
+  <p>論理モデルは、ビジネスレイヤーとシステムレイヤーで構成します。どのユースケースも、節点と遷移からなる静的モデルと、遷移を選んで並べた動的モデル（シナリオ）で表します。実装ビューは、論理モデルの概念をBPMNとUMLのどの要素で表すかを示します。</p>
+  <ul class="legend" aria-label="凡例">
+    <li><span class="sw new"></span>確定（太い枠、ADR-xx は決定記録の番号）</li>
+    <li><span class="sw prop"></span>提案（破線の枠）</li>
+    <li><span class="sw inh"></span>ucspecから継承（細い実線の枠）</li>
+    <li><span class="sw opn"></span>未決（点線の枠）</li>
+    <li><span class="sw open">O-xx</span>未決事項の番号</li>
+    <li>◆ 全体と部分</li>
+    <li>△ 種類の分け方</li>
+    <li>破線の矢印 作業からビジネスオブジェクトへの関係</li>
+  </ul>
+  <figure>
+    <div class="scroll">
+<!--SVG-->
+    </div>
+    <figcaption>左が論理モデル、右が実装ビューです。ビジネスレイヤーは、節点と作業遷移で静的モデルを表します。システムレイヤーでは、ユーザーインターフェースが画面と画面遷移を持ち、ユーザーユースケースがその一部を範囲として指します。サービスユースケースは、処理と処理遷移を持ちます。実装ビューの要素は、破線の矢印で論理モデルの概念を指します。</figcaption>
+  </figure>
+  
+  <section class="ex">
+    <div>
+      <h2>記述例：ビジネスユースケース仕様書</h2>
+      <p class="note">上の概念モデルに沿って、1つのビジネスユースケースを仕様書として書いた例です。業務の内容は説明用の架空のものです。人が読んで合意するために必要な項目だけを載せています。</p>
+    </div>
+    <div class="doc">
+      <h3 class="doct">経費精算</h3>
+      <dl class="facts">
+        <dt>概要</dt><dd>従業員が立て替えた経費を申請し、上長の承認を経て、精算する。</dd>
+        <dt>きっかけ</dt><dd>従業員が、業務のために経費を立て替えた。</dd>
+        <dt>事前条件</dt><dd>申請者と、その上長が登録されている。</dd>
+        <dt>事後条件</dt><dd>
+          <ul class="plain">
+            <li><b>精算完了</b>：支払データが作られ、領収書の原本が確認されている。経費申請は精算済みである。</li>
+            <li><b>取下げ</b>：経費申請は残っていない。</li>
+            <li><b>却下</b>：経費申請は却下済みとして残り、支払データは作られていない。</li>
+          </ul></dd>
+      </dl>
+      <h3>アクター</h3>
+      <div class="tbl"><table><thead><tr><th>アクター</th><th>役割</th></tr></thead><tbody><tr><td>申請者</td><td>経費を立て替え、精算を申請する</td></tr><tr><td>上長</td><td>申請の内容を確かめ、承認、差戻し、却下のいずれかを決める</td></tr><tr><td>経理担当</td><td>領収書の原本を、申請の内容と照らして確かめる</td></tr><tr><td>システム</td><td>支払データを、人の操作なしに作る</td></tr></tbody></table></div>
+      <h3>業務の流れ</h3>
+      <figure class="flow"><svg viewBox="0 0 1000 472" role="img" aria-label="経費精算のビジネスユースケースをBPMNで描いた図。申請者、上長、システム、経理担当の4つのレーンがある。開始イベントから経費申請、申請承認へ進み、それぞれの後ろの排他ゲートウェイで作業結果ごとに分かれる。承認の後、並行ゲートウェイで支払データ作成と領収書原本の確認に分かれ、合流して終了イベントの精算完了に着く。取下げと却下の終了イベントもある。"><defs><marker id="fa" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="fa" d="M1 1.5 L11 6 L1 10.5 Z"/></marker></defs><rect class="pl" x="1" y="1" width="998" height="469"/><line class="pl" x1="26" y1="1" x2="26" y2="470"/><line class="pl" x1="52" y1="1" x2="52" y2="470"/><text class="ll" transform="translate(18,235) rotate(-90)" text-anchor="middle">経費精算</text><text class="ll" transform="translate(43,65) rotate(-90)" text-anchor="middle">申請者</text><line class="pl" x1="26" y1="130" x2="999" y2="130"/><text class="ll" transform="translate(43,190) rotate(-90)" text-anchor="middle">上長</text><line class="pl" x1="26" y1="250" x2="999" y2="250"/><text class="ll" transform="translate(43,305) rotate(-90)" text-anchor="middle">システム</text><line class="pl" x1="26" y1="360" x2="999" y2="360"/><text class="ll" transform="translate(43,415) rotate(-90)" text-anchor="middle">経理担当</text><path class="fl" d="M105 72 L123 72" marker-end="url(#fa)"/><path class="fl" d="M255 72 L280 72" marker-end="url(#fa)"/><path class="fl" d="M318 72 L363 72" marker-end="url(#fa)"/><text class="ft" x="340" y="64" text-anchor="middle">取下げ</text><path class="fl" d="M300 90 L300 190 L338 190" marker-end="url(#fa)"/><text class="ft" x="308" y="145" text-anchor="start">申請</text><path class="fl" d="M470 190 L495 190" marker-end="url(#fa)"/><path class="fl" d="M515 172 L515 22 L190 22 L190 42" marker-end="url(#fa)"/><text class="ft" x="352" y="16" text-anchor="middle">差戻し</text><path class="fl" d="M533 190 L578 190" marker-end="url(#fa)"/><text class="ft" x="555" y="182" text-anchor="middle">却下</text><path class="fl" d="M515 208 L515 305 L600 305" marker-end="url(#fa)"/><text class="ft" x="523" y="260" text-anchor="start">承認</text><path class="fl" d="M638 305 L678 305" marker-end="url(#fa)"/><path class="fl" d="M620 323 L620 415 L678 415" marker-end="url(#fa)"/><path class="fl" d="M810 305 L840 305" marker-end="url(#fa)"/><path class="fl" d="M810 415 L860 415 L860 325" marker-end="url(#fa)"/><path class="fl" d="M878 305 L923 305" marker-end="url(#fa)"/><circle class="fb" cx="95" cy="72" r="10"/><rect class="fb" x="125" y="44" width="130" height="56" rx="9"/><text class="fy" x="132" y="57">ユーザー</text><text class="fn" x="190" y="82" text-anchor="middle">経費申請</text><polygon class="fb" points="300,54 318,72 300,90 282,72"/><path class="fg" d="M294 66 L306 78 M306 66 L294 78"/><circle class="fe" cx="375" cy="72" r="9"/><text class="fs" x="375" y="98" text-anchor="middle">取下げ</text><rect class="fb" x="340" y="162" width="130" height="56" rx="9"/><text class="fy" x="347" y="175">ユーザー</text><text class="fn" x="405" y="200" text-anchor="middle">申請承認</text><polygon class="fb" points="515,172 533,190 515,208 497,190"/><path class="fg" d="M509 184 L521 196 M521 184 L509 196"/><circle class="fe" cx="590" cy="190" r="9"/><text class="fs" x="590" y="216" text-anchor="middle">却下</text><polygon class="fb" points="620,287 638,305 620,323 602,305"/><path class="fg" d="M612 305 L628 305 M620 297 L620 313"/><rect class="fb" x="680" y="277" width="130" height="56" rx="9"/><text class="fy" x="687" y="290">サービス</text><text class="fn" x="745" y="315" text-anchor="middle">支払データ作成</text><rect class="fb" x="680" y="387" width="130" height="56" rx="9"/><text class="fy" x="687" y="400">マニュアル</text><text class="fn" x="745" y="425" text-anchor="middle">領収書原本の確認</text><polygon class="fb" points="860,287 878,305 860,323 842,305"/><path class="fg" d="M852 305 L868 305 M860 297 L860 313"/><circle class="fe" cx="935" cy="305" r="9"/><text class="fs" x="935" y="331" text-anchor="middle">精算完了</text></svg></figure>
+      <p class="note">BPMNの記法で描いています。レーンがアクター、角の丸い四角が作業、×のひし形が作業結果による分岐、＋のひし形が並行する作業の始まりと終わりです。分岐から出る線には、作業結果の名前を書いています。</p>
+      <h3>作業</h3>
+      <div class="tbl"><table><thead><tr><th>作業</th><th>種類</th><th>担い手</th><th>概要</th><th>事前条件</th><th>作業結果と事後条件</th></tr></thead><tbody><tr><td>経費申請</td><td>ユーザー作業</td><td>申請者</td><td>立て替えた経費の内容を入力し、申請する</td><td>経費を立て替えている</td><td><b>申請</b>：経費申請が申請済みになる<br><b>取下げ</b>：経費申請は残らない</td></tr><tr><td>申請承認</td><td>ユーザー作業</td><td>上長</td><td>申請の内容を確かめ、承認、差戻し、却下のいずれかを決める</td><td>経費申請が申請済みである</td><td><b>承認</b>：経費申請が承認済みになる<br><b>差戻し</b>：経費申請が申請者へ戻る<br><b>却下</b>：経費申請が却下済みになる</td></tr><tr><td>支払データ作成</td><td>サービス作業</td><td>システム</td><td>承認された金額の支払データを作る</td><td>経費申請が承認済みである</td><td><b>作成済み</b>：支払データが作られている</td></tr><tr><td>領収書原本の確認</td><td>マニュアル作業</td><td>経理担当</td><td>提出された領収書の原本を、申請の内容と照らして確かめる</td><td>経費申請が承認済みである</td><td><b>確認済み</b>：領収書の原本が確認されている</td></tr></tbody></table></div>
+      <h3>扱う情報</h3>
+      <div class="tbl"><table><thead><tr><th>ビジネスオブジェクト</th><th>説明</th><th>状態</th></tr></thead><tbody><tr><td>経費申請</td><td>従業員が立て替えた経費1件の申請。このユースケースで作られる</td><td>申請済み、承認済み、却下済み、精算済み</td></tr><tr><td>支払データ</td><td>承認された金額を支払うためのデータ。このユースケースで作られる</td><td>—</td></tr></tbody></table></div>
+      <h3>シナリオ一覧</h3>
+      <div class="tbl"><table><thead><tr><th>シナリオ</th><th>目的</th><th>終わり方</th></tr></thead><tbody><tr><td>承認された経費を精算する</td><td>申請が差戻しも却下もなく進み、精算が完了することを確かめる</td><td>精算完了</td></tr><tr><td>差戻しを受けて申請し直す</td><td>差し戻された申請を直して出し直し、精算が完了することを確かめる</td><td>精算完了</td></tr><tr><td>申請を取り下げる</td><td>申請者が入力の途中でやめたとき、経費申請が残らないことを確かめる</td><td>取下げ</td></tr><tr><td>申請が却下される</td><td>上長が却下したとき、支払データが作られないことを確かめる</td><td>却下</td></tr></tbody></table></div>
+      <p class="note">この例では、1本目のシナリオだけを下に書いています。</p>
+      <h3>シナリオ：承認された経費を精算する</h3>
+      <dl class="facts">
+        <dt>目的</dt><dd>申請が差戻しも却下もなく進み、精算が完了することを確かめる。</dd>
+        <dt>事前条件</dt><dd>申請者が、立て替えた経費の領収書の原本を持っている。</dd>
+        <dt>手順</dt><dd>
+          <ol class="steps">
+            <li>申請者が、立て替えた経費の内容を入力して申請する。</li>
+            <li>上長が、申請の内容を確かめて承認する。</li>
+            <li>システムが、支払データを作る。並行して、経理担当が、領収書の原本を確かめる。</li>
+          </ol></dd>
+        <dt>期待結果</dt><dd>支払データが作られ、領収書の原本が確認されている。経費申請は精算済みになり、ユースケースは「精算完了」で終わる。</dd>
+      </dl>
+    </div>
+  </section>
+  <section class="ex" id="sysex">
+    <div>
+      <h2>記述例：システムレイヤーの仕様書</h2>
+      <p class="note">経費精算システムを、ユーザーインターフェース、ユーザーユースケース、サービスユースケースに分けて書いた例です。画面遷移はユーザーインターフェースとして1つ作り、ユーザーユースケースは、その一部を範囲として指します。サービスユースケースは、1つずつ処理の流れを持ちます。</p>
+    </div>
+    <div class="doc">
+      <h3 class="doct">ユーザーインターフェース：経費精算システム</h3>
+      <p class="note">ユースケースとは独立に作ります。複数のユーザーユースケースが、この画面遷移の一部を使います。</p>
+      <h3>画面遷移</h3>
+      <figure class="flow"><svg viewBox="0 -38 800 368" role="img" aria-label="経費精算システムのステートマシン図。開始の黒い丸から検索画面へ進む。画面は検索画面、申請画面、申請確認画面、承認画面の4つ。検索画面から新規作成で申請画面へ、確認へ進むで申請確認画面へ進む。申請確認画面から修正するで申請画面へ、申請するで検索画面へ進む。申請画面からやめるで検索画面へ戻る。検索画面から申請を選ぶで承認画面へ進み、承認画面から承認する、差し戻す、却下する、検索画面へ戻るで検索画面へ戻る。"><defs><marker id="m-all" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="fmo" d="M1.5 1.5 L11 6 L1.5 10.5"/></marker></defs><rect class="ffr" x="1" y="-37" width="798" height="366"/><polygon class="fft" points="1,-37 214,-37 214,-22 202,-11 1,-11"/><text class="ffn" x="10" y="-19">stm 経費精算システム</text><path class="fl" d="M49 160 L83 160" marker-end="url(#m-all)"/><path class="fl" d="M150 185 L150 260 L353 260" marker-end="url(#m-all)"/><text class="ft" x="250" y="253" text-anchor="middle">申請を選ぶ</text><path class="fl" d="M380 235 L380 205 L190 205 L190 187" marker-end="url(#m-all)"/><text class="ft" x="285" y="199" text-anchor="middle">検索画面へ戻る</text><path class="fl" d="M420 285 L420 310 L110 310 L110 187" marker-end="url(#m-all)"/><text class="ft" x="265" y="304" text-anchor="middle">承認する／差し戻す／却下する</text><path class="fl" d="M150 135 L150 80 L353 80" marker-end="url(#m-all)"/><text class="ft" x="250" y="72" text-anchor="middle">新規作成</text><path class="fl" d="M485 70 L623 70" marker-end="url(#m-all)"/><text class="ft" x="554" y="62" text-anchor="middle">確認へ進む</text><path class="fl" d="M625 92 L487 92" marker-end="url(#m-all)"/><text class="ft" x="554" y="108" text-anchor="middle">修正する</text><path class="fl" d="M690 55 L690 26 L110 26 L110 133" marker-end="url(#m-all)"/><text class="ft" x="400" y="20" text-anchor="middle">申請する</text><path class="fl" d="M420 105 L420 160 L217 160" marker-end="url(#m-all)"/><text class="ft" x="320" y="153" text-anchor="middle">やめる</text><circle class="fk" cx="40" cy="160" r="9"/><rect class="fb" x="85" y="135" width="130" height="50" rx="10"/><text class="fn" x="150" y="165" text-anchor="middle">検索画面</text><rect class="fb" x="355" y="55" width="130" height="50" rx="10"/><text class="fn" x="420" y="85" text-anchor="middle">申請画面</text><rect class="fb" x="625" y="55" width="130" height="50" rx="10"/><text class="fn" x="690" y="85" text-anchor="middle">申請確認画面</text><rect class="fb" x="355" y="235" width="130" height="50" rx="10"/><text class="fn" x="420" y="265" text-anchor="middle">承認画面</text></svg></figure>
+      <p class="note">UMLのステートマシン図です。左上の「stm」は、ステートマシン図であることを示す見出しです。角の丸い四角が状態で、画面に当たります。矢印が遷移で、画面遷移に当たります。矢印には、遷移を起こす操作を書いています。黒い丸は開始を表し、最初に開く画面を指します。</p>
+      <h3>画面</h3>
+      <div class="tbl"><table><thead><tr><th>画面</th><th>説明</th><th>そこから出る画面遷移</th></tr></thead><tbody><tr><td>検索画面</td><td>経費申請を検索し、一覧で表示する</td><td>新規作成、申請を選ぶ</td></tr><tr><td>申請画面</td><td>経費の日付、金額、内容を入力する</td><td>確認へ進む、やめる</td></tr><tr><td>申請確認画面</td><td>入力した内容を、申請の前に確かめる</td><td>申請する、修正する</td></tr><tr><td>承認画面</td><td>選んだ経費申請の内容を表示する</td><td>承認する、差し戻す、却下する、検索画面へ戻る</td></tr></tbody></table></div>
+    </div>
+    <div class="doc">
+      <h3 class="doct">ユーザーユースケース：経費申請</h3>
+      <dl class="facts">
+        <dt>詳細化する作業</dt><dd>経費申請（ビジネスユースケース「経費精算」のユーザー作業）</dd>
+        <dt>概要</dt><dd>申請者が、立て替えた経費の内容を入力し、確かめて申請する。</dd>
+        <dt>アクター</dt><dd>申請者</dd>
+        <dt>きっかけ</dt><dd>申請者が、検索画面を開いている。</dd>
+        <dt>事前条件</dt><dd>申請者が、システムにログインしている。</dd>
+      </dl>
+      <h3>画面遷移と、このユースケースの範囲</h3>
+      <figure class="flow"><svg viewBox="0 -38 800 368" role="img" aria-label="経費精算システムの画面遷移の全体と、ユーザーユースケース「経費申請」の範囲を示した図。画面は検索画面、申請画面、申請確認画面、承認画面の4つ。範囲に入る画面遷移は、検索画面から申請画面への新規作成、申請画面から申請確認画面への確認へ進む、申請確認画面から申請画面への修正する、申請確認画面から検索画面への申請する、申請画面から検索画面へのやめる。始点となる画面遷移は新規作成。検索画面と承認画面の間の画面遷移は、範囲の外にある。"><defs><marker id="m-in" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="fmi" d="M1.5 1.5 L11 6 L1.5 10.5"/></marker><marker id="m-out" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="fmm" d="M1.5 1.5 L11 6 L1.5 10.5"/></marker></defs><rect class="ffr" x="1" y="-37" width="798" height="366"/><polygon class="fft" points="1,-37 214,-37 214,-22 202,-11 1,-11"/><text class="ffn" x="10" y="-19">stm 経費精算システム</text><path class="fo" d="M150 185 L150 260 L353 260" marker-end="url(#m-out)"/><text class="fs" x="250" y="253" text-anchor="middle">申請を選ぶ</text><path class="fo" d="M380 235 L380 205 L190 205 L190 187" marker-end="url(#m-out)"/><text class="fs" x="285" y="199" text-anchor="middle">検索画面へ戻る</text><path class="fo" d="M420 285 L420 310 L110 310 L110 187" marker-end="url(#m-out)"/><text class="fs" x="265" y="304" text-anchor="middle">承認する／差し戻す／却下する</text><path class="fl2" d="M150 135 L150 80 L353 80" marker-end="url(#m-in)"/><text class="ft" x="250" y="72" text-anchor="middle">新規作成</text><path class="fl2" d="M485 70 L623 70" marker-end="url(#m-in)"/><text class="ft" x="554" y="62" text-anchor="middle">確認へ進む</text><path class="fl2" d="M625 92 L487 92" marker-end="url(#m-in)"/><text class="ft" x="554" y="108" text-anchor="middle">修正する</text><path class="fl2" d="M690 55 L690 26 L110 26 L110 133" marker-end="url(#m-in)"/><text class="ft" x="400" y="20" text-anchor="middle">申請する</text><path class="fl2" d="M420 105 L420 160 L217 160" marker-end="url(#m-in)"/><text class="ft" x="320" y="153" text-anchor="middle">やめる</text><rect class="fb" x="85" y="135" width="130" height="50" rx="10"/><text class="fn" x="150" y="165" text-anchor="middle">検索画面</text><rect class="fb" x="355" y="55" width="130" height="50" rx="10"/><text class="fn" x="420" y="85" text-anchor="middle">申請画面</text><rect class="fb" x="625" y="55" width="130" height="50" rx="10"/><text class="fn" x="690" y="85" text-anchor="middle">申請確認画面</text><rect class="fbo" x="355" y="235" width="130" height="50" rx="10"/><text class="fno" x="420" y="265" text-anchor="middle">承認画面</text><circle class="fa2c" cx="150" cy="108" r="7"/><text class="ft" x="138" y="112" text-anchor="end">始点</text><rect class="flg" x="548" y="236" width="238" height="84" rx="4"/><path class="fl2" d="M562 256 L606 256"/><text class="flt" x="616" y="260" text-anchor="start">このユースケースの範囲</text><circle class="fa2c" cx="584" cy="278" r="7"/><text class="flt" x="616" y="282" text-anchor="start">始点となる画面遷移</text><path class="fo" d="M562 300 L606 300"/><text class="flt" x="616" y="304" text-anchor="start">範囲の外</text></svg></figure>
+      <p class="note">上のステートマシン図に、このユースケースの始点と範囲を重ねています。</p>
+      <h3>扱う情報</h3>
+      <div class="tbl"><table><thead><tr><th>ビジネスオブジェクト</th><th>使い方</th></tr></thead><tbody><tr><td>経費申請</td><td>入力の内容から作り、状態を申請済みにする。ビジネスレイヤーの定義を参照する</td></tr></tbody></table></div>
+      <h3>シナリオ一覧</h3>
+      <div class="tbl"><table><thead><tr><th>シナリオ</th><th>目的</th><th>終わり方（作業結果）</th></tr></thead><tbody><tr><td>経費を申請する</td><td>入力した内容を確かめて申請できることを確かめる</td><td>申請</td></tr><tr><td>入力を直してから申請する</td><td>申請確認画面から申請画面へ戻って直せることを確かめる</td><td>申請</td></tr><tr><td>入力をやめる</td><td>入力の途中でやめたとき、経費申請が作られないことを確かめる</td><td>取下げ</td></tr></tbody></table></div>
+      <p class="note">終わり方は、シナリオごとに宣言します。ユーザー作業「経費申請」の作業結果のうち、どれに当たるかを書きます。この例では、1本目のシナリオだけを下に書いています。</p>
+      <h3>シナリオ：経費を申請する</h3>
+      <dl class="facts">
+        <dt>目的</dt><dd>入力した内容を確かめて申請できることを確かめる。</dd>
+        <dt>事前条件</dt><dd>申請者が、検索画面を開いている。</dd>
+        <dt>手順</dt><dd>
+          <ol class="steps">
+            <li>申請者が、検索画面で「新規作成」を選ぶ。申請画面が開く。</li>
+            <li>申請者が、経費の日付、金額、内容を入力し、「確認へ進む」を選ぶ。申請確認画面が開く。</li>
+            <li>申請者が、表示された内容を確かめ、「申請する」を選ぶ。検索画面へ戻る。</li>
+          </ol></dd>
+        <dt>期待結果</dt><dd>入力した内容で、経費申請が申請済みになっている。</dd>
+        <dt>終わり方</dt><dd>作業結果「申請」</dd>
+      </dl>
+    </div>
+    <div class="doc">
+      <h3 class="doct">サービスユースケース：支払データ作成</h3>
+      <dl class="facts">
+        <dt>詳細化する作業</dt><dd>支払データ作成（ビジネスユースケース「経費精算」のサービス作業）</dd>
+        <dt>概要</dt><dd>承認された経費申請から、支払のためのデータを作る。人の操作なしに動く。</dd>
+        <dt>きっかけ</dt><dd>上長が、経費申請を承認した。</dd>
+        <dt>事前条件</dt><dd>経費申請が承認済みである。</dd>
+      </dl>
+      <h3>処理の流れ</h3>
+      <figure class="flow"><svg viewBox="0 -38 900 240" role="img" aria-label="サービスユースケース「支払データ作成」のアクティビティ図。開始から、承認済みの経費申請を読む。支払方法が振込なら振込データを作り、給与と合算なら給与合算データを作る。どちらの場合も、支払データを保存して終わる。"><defs><marker id="m-all" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="fmo" d="M1.5 1.5 L11 6 L1.5 10.5"/></marker></defs><rect class="ffr" x="1" y="-37" width="898" height="238"/><polygon class="fft" points="1,-37 204,-37 204,-22 192,-11 1,-11"/><text class="ffn" x="10" y="-19">act 支払データ作成</text><path class="fl" d="M45 100 L63 100" marker-end="url(#m-all)"/><path class="fl" d="M235 100 L257 100" marker-end="url(#m-all)"/><path class="fl" d="M275 84 L275 45 L353 45" marker-end="url(#m-all)"/><text class="ft" x="283" y="62" text-anchor="start">[振込]</text><path class="fl" d="M275 116 L275 155 L353 155" marker-end="url(#m-all)"/><text class="ft" x="283" y="146" text-anchor="start">[給与と合算]</text><path class="fl" d="M525 45 L600 45 L600 82" marker-end="url(#m-all)"/><path class="fl" d="M525 155 L600 155 L600 118" marker-end="url(#m-all)"/><path class="fl" d="M616 100 L653 100" marker-end="url(#m-all)"/><path class="fl" d="M825 100 L858 100" marker-end="url(#m-all)"/><circle class="fk" cx="36" cy="100" r="9"/><rect class="fb" x="65" y="78" width="170" height="44" rx="16"/><text class="fna" x="150" y="104" text-anchor="middle">承認済みの経費申請を読む</text><polygon class="fb" points="275,84 291,100 275,116 259,100"/><rect class="fb" x="355" y="23" width="170" height="44" rx="16"/><text class="fna" x="440" y="49" text-anchor="middle">振込データを作る</text><rect class="fb" x="355" y="133" width="170" height="44" rx="16"/><text class="fna" x="440" y="159" text-anchor="middle">給与合算データを作る</text><polygon class="fb" points="600,84 616,100 600,116 584,100"/><rect class="fb" x="655" y="78" width="170" height="44" rx="16"/><text class="fna" x="740" y="104" text-anchor="middle">支払データを保存する</text><circle class="fb" cx="870" cy="100" r="10"/><circle class="fk" cx="870" cy="100" r="6"/></svg></figure>
+      <p class="note">UMLのアクティビティ図です。サービスユースケース1つにつき、1枚描きます。左上の「act」は、アクティビティ図であることを示す見出しです。角の丸い四角がアクションで、処理に当たります。矢印が制御フローで、処理遷移に当たります。ひし形は分岐と合流で、分岐から出る矢印の [ ] の中が条件です。黒い丸が開始、二重の丸が終了です。</p>
+      <h3>処理</h3>
+      <div class="tbl"><table><thead><tr><th>処理</th><th>説明</th></tr></thead><tbody><tr><td>承認済みの経費申請を読む</td><td>承認された経費申請から、金額と支払方法を読む</td></tr><tr><td>振込データを作る</td><td>支払方法が振込のとき、申請者の口座へ振り込むためのデータを作る</td></tr><tr><td>給与合算データを作る</td><td>支払方法が給与と合算のとき、給与計算へ渡すためのデータを作る</td></tr><tr><td>支払データを保存する</td><td>作ったデータを、支払データとして保存する</td></tr></tbody></table></div>
+      <h3>扱う情報</h3>
+      <div class="tbl"><table><thead><tr><th>ビジネスオブジェクト</th><th>使い方</th></tr></thead><tbody><tr><td>経費申請</td><td>承認済みのものを読む。状態は変えない</td></tr><tr><td>支払データ</td><td>新しく作る</td></tr></tbody></table></div>
+      <h3>シナリオ一覧</h3>
+      <div class="tbl"><table><thead><tr><th>シナリオ</th><th>目的</th><th>終わり方（作業結果）</th></tr></thead><tbody><tr><td>振込の支払データを作る</td><td>支払方法が振込のとき、振込のデータが作られることを確かめる</td><td>作成済み</td></tr><tr><td>給与と合算する支払データを作る</td><td>支払方法が給与と合算のとき、給与計算へ渡すデータが作られることを確かめる</td><td>作成済み</td></tr></tbody></table></div>
+      <p class="note">この例では、1本目のシナリオだけを下に書いています。</p>
+      <h3>シナリオ：振込の支払データを作る</h3>
+      <dl class="facts">
+        <dt>目的</dt><dd>支払方法が振込のとき、振込のデータが作られることを確かめる。</dd>
+        <dt>事前条件</dt><dd>承認済みの経費申請があり、その支払方法が振込である。</dd>
+        <dt>手順</dt><dd>
+          <ol class="steps">
+            <li>システムが、承認済みの経費申請を読む。</li>
+            <li>支払方法が振込なので、システムが振込データを作る。</li>
+            <li>システムが、作ったデータを支払データとして保存する。</li>
+          </ol></dd>
+        <dt>期待結果</dt><dd>振込の支払データが保存されている。経費申請の状態は、承認済みのままである。</dd>
+        <dt>終わり方</dt><dd>作業結果「作成済み」</dd>
+      </dl>
+    </div>
+  </section>
+</main>
